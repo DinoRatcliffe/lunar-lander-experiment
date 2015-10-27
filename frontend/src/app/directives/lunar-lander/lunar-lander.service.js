@@ -1,5 +1,5 @@
 'use strict'
-angular.module('EXP')
+angular.module('abyork')
 .service('lunarLanderService', function() {
     var service = {listeners: {}};
     var game;

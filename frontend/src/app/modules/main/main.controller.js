@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('EXP')
+    angular.module('abyork')
     .config(function($stateProvider) {
         $stateProvider.state('root.main', {
             url: '/',

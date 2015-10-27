@@ -2,3 +2,15 @@ elasticsearch:
  image: elasticsearch
  ports:
   - "9200:9200"
+api:
+ build: ./server
+ environment:
+    DECKARD_DELAY_START: 20000
+ ports:
+  - "8080:8080"
+ links:
+  - elasticsearch
+front:
+ build: ./frontend
+ ports:
+  - "8081:80"

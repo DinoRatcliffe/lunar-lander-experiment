@@ -1,4 +1,4 @@
-angular.module('EXP', [
+angular.module('abyork', [
   'ui.router',
   'ngMaterial',
   'ngResource',
@@ -13,4 +13,4 @@ angular.module('EXP', [
     $rootScope.currentUser = '';
 })
 //TODO change at production build step
-.constant('APIURL', 'http://localhost:8080');
+.constant('APIURL', 'http://192.168.99.100:8080');

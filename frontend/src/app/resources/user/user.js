@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('EXP')
+angular.module('abyork')
 .factory('User', function ($resource, APIURL) {
     return $resource(APIURL + '/user', {
     }, {

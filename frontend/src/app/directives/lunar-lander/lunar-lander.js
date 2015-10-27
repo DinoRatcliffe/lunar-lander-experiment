@@ -497,6 +497,6 @@
         $scope.lunarLanderService = lunarLanderService;
     }
 
-    angular.module('EXP')
+    angular.module('abyork')
     .directive('lunarLander', lunarLander);
 })();

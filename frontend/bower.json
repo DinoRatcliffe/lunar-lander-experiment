@@ -2,7 +2,7 @@
   "name": "abyork",
   "main": [
     "/dist/abyork.min.js",
-    "/dist/deckard.min.css"
+    "/dist/abyork.min.css"
   ],
   "version": "0.1.0",
   "description": "AB TEST York",
