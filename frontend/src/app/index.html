@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="EXP">
+    <head>
+        <meta charset="utf-8"/>
+        <title>EXP</title>
+        <link rel="icon" type="image/x-icon" href="/assets/images/favicon.png"/>
+        <!-- inject:vendor:css -->
+        <link rel="stylesheet" href="/angular-material/angular-material.css">
+        <!-- endinject -->
+        <!-- inject:css -->
+        <link rel="stylesheet" href="/css/app.css">
+        <link rel="stylesheet" href="/css/directives/lunar-lander/lunar-lander.css">
+        <link rel="stylesheet" href="/css/directives/tool-tip/tool-tip.css">
+        <link rel="stylesheet" href="/css/modules/main/main.css">
+        <!-- endinject -->
+        <!-- fonts -->
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500' rel='stylesheet' type='text/css'>
+        <!-- endfonts -->
+    </head>
+    <body layout="row">
+        <div layout="column" style="height: 100%" flex>
+            <div layout="row" style="height: 100%" flex ui-view></div>
+        </div>
+        <!-- inject:vendor:js -->
+        <script src="/angular/angular.js"></script>
+        <script src="/angular-route/angular-route.js"></script>
+        <script src="/angular-resource/angular-resource.js"></script>
+        <script src="/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="/angular-cookie/angular-cookie.js"></script>
+        <script src="/angular-animate/angular-animate.js"></script>
+        <script src="/angular-aria/angular-aria.js"></script>
+        <script src="/lodash/lodash.js"></script>
+        <script src="/angular-material/angular-material.js"></script>
+        <!-- endinject -->
+        <!-- inject:js -->
+        <script src="/app.js"></script>
+        <script src="/resources/user/user.js"></script>
+        <script src="/modules/root/root.controller.js"></script>
+        <script src="/modules/main/main.controller.js"></script>
+        <script src="/directives/tool-tip/tool-tip.js"></script>
+        <script src="/directives/lunar-lander/lunar-lander.service.js"></script>
+        <script src="/directives/lunar-lander/lunar-lander.js"></script>
+        <script src="/abyork-templates.js"></script>
+        <!-- endinject -->
+    </body>
+</html>

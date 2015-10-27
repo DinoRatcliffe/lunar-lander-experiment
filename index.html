@@ -1,0 +1,240 @@
+<html>
+    <head>
+    </head>
+    <body style="margin: 0;">
+        <canvas id="myCanvas" width="800" height="600" style="background-color:#0E2430;"></canvas>
+        <script>
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            var i = 0;
+            var world = {
+                edge: [10, 10, 800-10, 600-10],
+                draw: function(ctx) {
+                    ctx.save();
+                    ctx.strokeStyle = '#FC3A51';
+                    ctx.lineWidth=1;
+                    ctx.beginPath();
+                    ctx.moveTo(this.edge[0], this.edge[1]);
+                    ctx.lineTo(this.edge[2], this.edge[0]);
+                    ctx.lineTo(this.edge[2], this.edge[3]);
+                    ctx.lineTo(this.edge[0], this.edge[3]);
+                    ctx.lineTo(this.edge[0], this.edge[1]);
+
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            }
+
+            var keyboard = {
+                _pressed: {},
+
+                LEFT: 37,
+                UP: 38,
+                RIGHT: 39,
+                DOWN: 40,
+
+                isDown: function(keyCode) {
+                    return this._pressed[keyCode];
+                },
+
+                onKeydown: function(event) {
+                    this._pressed[event.keyCode] = true;
+                },
+
+                onKeyup: function(event) {
+                    delete this._pressed[event.keyCode];
+                }
+            }
+
+            window.addEventListener('keyup', function(event) { keyboard.onKeyup(event); }, false);
+            window.addEventListener('keydown', function(event) { keyboard.onKeydown(event); }, false);
+
+            function normalize(vec) {
+                var len = Math.sqrt(vec[0] * vec[0] + vec[1] * vec[1]);
+                return [vec[0]/len, vec[1]/len];
+            }
+
+            function rotateVec(vec, rot) {
+                var newVec = [
+                    vec[0] * Math.cos(rot) - vec[1] * Math.sin(rot),
+                    vec[0] * Math.sin(rot) + vec[1] * Math.cos(rot)
+                ]
+                return newVec;
+            }
+
+            function rotationRad(vec) {
+                res = Math.atan(vec[1]/vec[0]);
+                console.log(res);
+                return res;
+            }
+
+            var GRAVITY_DIR = [0, 1];
+            var GRAVITY_SCALE = 0.001;
+            var platforms = [
+                new landingPad([200, 600-50], 80, 100)
+            ]
+
+            function landingPad(loc, len, score) {
+                this.loc = loc
+                this.len = len
+                this.score = score
+
+                this.draw = function(ctx) {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(this.loc[0], this.loc[1]);
+                    ctx.lineTo(this.loc[0] + this.len, this.loc[1]);
+                    ctx.strokeStyle = '#FFFFFF';
+                    ctx.lineWidth=10;
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = "16px Arial";
+                    ctx.fillText(score+"", this.loc[0], this.loc[1] + 20);
+                    ctx.restore();
+                }
+            }
+
+            function ship(startLoc, startRotation) {
+                this.ROTATION_SPEED = 2.5;
+                this.THRUST_POWER = 0.003;
+                this.THRUST_DEGRADE = 1;
+                this.SIZE = 2;
+                this.DEBUG = true;
+
+                this.rotation = startRotation;
+                this.loc = startLoc;
+                this.vec = normalize([1, 0]);
+
+                this.tick = function() {
+                    //air resistence
+                    //var normVel = normalize(this.vec);
+                    //this.vec[0] -= normVel[0] * 0.01;
+                    //this.vec[1] -= normVel[1] * 0.01;
+
+                    // gravity
+                    this.vec[0] += GRAVITY_DIR[0] * GRAVITY_SCALE;
+                    this.vec[1] += GRAVITY_DIR[1] * GRAVITY_SCALE;
+
+                    this.loc[0] += this.vec[0];
+                    this.loc[1] += this.vec[1];
+                }
+
+                this.rotate = function(direction) {
+                    var rot = Math.PI*2/360 * this.ROTATION_SPEED;
+                    if (direction === 'left') {
+                        rot *= -1;
+                    }
+                    this.rotation += rot;
+                }
+
+                this.collidesWithWorld = function(world) {
+                    var collision = false;
+                    var rotVec = rotateVec([1, 0], this.rotation);
+
+                    if ((this.loc[0] - 5 * this.SIZE) < world.edge[0] ||
+                        ((rotVec[0] * 7 * this.SIZE) + this.loc[0] - (4 * this.SIZE)) < world.edge[0]) {
+                        collision = true;
+                    } else if((this.loc[0] + 5 * this.SIZE) > world.edge[2] ||
+                              ((rotVec[0] * 7 * this.SIZE) + this.loc[0] + (4 * this.SIZE)) > world.edge[2]) {
+                        collision = true;
+                    } else if((this.loc[1] - 5 * this.SIZE) < world.edge[1] ||
+                              ((rotVec[1] * 7 * this.SIZE) + this.loc[1] - (4 * this.SIZE)) < world.edge[0]) {
+                        collision = true;
+            } else if ((this.loc[1] + 5 * this.SIZE) > world.edge[3] || 
+                    ((rotVec[1] * 7 * this.SIZE) + this.loc[1] + (4 * this.SIZE)) > world.edge[3]) {
+
+                        collision = true;
+                    }
+
+                    return collision;
+                }
+
+                this.landedOnPlatform = function(platform) {
+                    return false;
+                }
+
+                this.touchingPlatform = function(platform) {
+                    var collision = true;
+                    var rotVec = rotateVec([1, 0], this.rotation);
+                    if (((this.loc[0] + 5 * this.SIZE) >= platform.loc[0] &&
+                    (this.loc[0] - 5 * this.SIZE) <= platform.loc[0] + platform.len &&
+                    (this.loc[1] + 5 * this.SIZE) >= platform.loc[1] - 5 && 
+                    (this.loc[1] - 5 * this.SIZE) <= platform.loc[1] + 5)
+
+                    ) {
+                        console.log('touching: ' + platform.score);
+                    }
+                }
+
+                this.thrust = function() {
+                    var rotationVec = normalize(rotateVec([1, 0], this.rotation));
+                    this.vec = [
+                        this.vec[0] + rotationVec[0] * this.THRUST_POWER,
+                        this.vec[1] + rotationVec[1] * this.THRUST_POWER,
+                    ];
+                }
+
+                this.draw = function(ctx) {
+                    //ship center
+                    ctx.save();
+                    ctx.translate(this.loc[0], this.loc[1]);
+
+                    ctx.beginPath();
+                    ctx.fillStyle = "#E8D5B9"
+                    ctx.arc(0, 0, 5 * this.SIZE,0,2*Math.PI);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    //ship dir vector
+                    ctx.beginPath();
+                    var rotVec = rotateVec([1, 0], this.rotation);
+                    ctx.arc(rotVec[0] * 7 * this.SIZE, rotVec[1] * 7 * this.SIZE, 4 * this.SIZE,0, 2*Math.PI);
+                    ctx.fill();
+
+                    //ship vel vec
+                    if (this.DEBUG) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = "#F5B349"
+                        ctx.arc(this.vec[0] * 10 * this.SIZE, this.vec[1] * 10 * this.SIZE, 3 * this.SIZE, 0, 2*Math.PI);
+                        ctx.stroke();
+                        ctx.restore();
+                    }
+                }
+            }
+
+            var craft = new ship([100, 100], 0);
+            init();
+
+            function init() {
+                if (ctx) {
+                    setInterval(tick, 16);
+                 } else {
+                    alert('unsuported Browser!');
+                }
+            }
+
+            function tick() {
+                i++;
+                if (keyboard.isDown(keyboard.LEFT)) craft.rotate('left');
+                if (keyboard.isDown(keyboard.RIGHT)) craft.rotate('right');
+                if (keyboard.isDown(keyboard.UP)) craft.thrust();
+                craft.tick();
+                craft.touchingPlatform(platforms[0]);
+                if(craft.collidesWithWorld(world)) {
+                    console.log('game over');
+                }
+                draw();
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, c.width, c.height);
+                craft.draw(ctx);
+                world.draw(ctx);
+                platforms.forEach(function(platform) {
+                    platform.draw(ctx);
+                });
+            }
+        </script>
+    </body>
+</html>
