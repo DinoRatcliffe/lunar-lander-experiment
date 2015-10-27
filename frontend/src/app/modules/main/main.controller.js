@@ -84,7 +84,7 @@
                 var confirm = $mdDialog.confirm()
                 .title('Participation Consent')
                 .content(
-                    '<ul><li>As part of this experiment you will play a space landing game</li><li>This is part of an experiment into how people play games</li><li>You must be 18 or older to take part in this experiment</li><li>Data about how you play the game will be gathered throughout the course of you playing the game</li><li>You may at anypoint exit the experiment</li><li>If you would like the data gathered to be deleted or not used then please email dratcl@essex.ac.uk with this ID: <b><i>' + $rootScope.currentUser.id + '</i></b></li></ul>'
+                    '<ul><li>This study is run by Dino Ratcliffe, PhD, under the supervision of Dr Paul Cairns, Reader in Human-Computer interaction at the University of York.</li><li>As part of this experiment you will play a space landing game</li><li>This is part of an experiment into how people play games</li><li>You must be 18 or older to take part in this experiment</li><li>Data about how you play the game will be gathered throughout the course of you playing the game. This data will be viewed by Dino Ratcliffe and Dr Paul Cairns.</li><li>The data will be anonymouse with your participation identified using a browser cookie</li><li>You may at anypoint exit the experiment</li><li>If you would like the data gathered to be deleted or not used then please email dratcl@essex.ac.uk with this ID: <b><i>' + $rootScope.currentUser.id + '</i></b></li><li>If you have any questions please email dratcl@essex.ac.uk</li></ul>'
                 )
                 .ariaLabel('Paricipaiton Consent')
                 .ok('I Agree');
@@ -100,7 +100,7 @@
                 var instructions = $mdDialog.confirm()
                 .title('Instructions')
                 .content(
-                    'The aim of the game is to land the ship upright on the white platform. <br/>To rotate the ship use the left and right arrow keys and to use the thrusters use the up arrow key.<br/>Your score will be based on how upright the ship is, how hard you land and how much fuel you have left' 
+                    'The aim of the game is to land the ship upright on the white platform. <br/>To rotate the ship use the left and right arrow keys and to control the thrusters use the up arrow key.<br/>Your score will be based on how upright the ship is, how hard you land and how much fuel you have left<br/>The levels will continue indefinitely so feel free to leave at anytime<br/>You can pause the game at anytime using the spacebar' 
                 )
                 .ariaLabel('Instructions')
                 .ok('Start');
