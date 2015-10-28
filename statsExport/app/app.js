@@ -28,12 +28,13 @@ function processUser(user) {
                   (user.currentLevel && user.currentLevel.playTime ? user.currentLevel.playTime : 0));
     userData.push(user.currentLevel && user.currentLevel.number ? user.currentLevel.number : 0);
     userData.push(user.difficulty);
+    userData.push(user.revisits ? user.revisits : 0);
     data.push(userData);
 }
 
 function convertToCSV(data) {
-    console.log('ID,PLAYTIME,LEVEL,TYPE');
+    console.log('ID,PLAYTIME,LEVEL,TYPE,REVISITS');
     data.forEach(function(data) {
-        console.log(data[0] + "," + data[1] + "," + data[2] + "," + data[3]);
+        console.log(data[0] + "," + data[1] + "," + data[2] + "," + data[3] + "," + data[4]);
     });
 }
